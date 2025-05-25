@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+
+		<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+		<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+		<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<style type="text/css">
+			html { height: 100% }
+			body { height: 100%; margin: 0; padding: 0 }
+			#mapid { height: 100%; }
+		</style>
+
+		<script type="text/javascript">
+			function initialize() {
+				var map = L.map('mapid').setView([54.180, -5.970], 13);
+
+
+				L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}{r}.png?apikey=3b0a1594bcb54395b549932f09812b3d', {
+					attribution: 'Maps &copy; <a href="https://www.thunderforest.com">Thunderforest</a>, Data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, Tracks &copy; <a href="https://live.primaltracking.com/aon2022/">Primal Tracking</a>',
+					maxZoom: 22
+				}).addTo(map);
+
+				L.control.locate().addTo(map);
+				L.control.scale().addTo(map);
+
+				var customLayer = L.geoJson(null, {
+					filter: function(f) {
+						console.log(f);
+						if (f.geometry.type == "Point")
+							return false;
+						return true;
+					},
+					style: function(f) {
+						return {
+							color: 'red',
+							opacity: '10%',
+						};
+					},
+				});
+
+				for (i = 200; i <= 245; i++) {
+					var kml = omnivore.kml(i+'.kml', null, customLayer);
+					kml.bindPopup(function(layer) {
+						console.log(layer.feature.properties.name);
+						return layer.feature.properties.name;
+					});
+					kml.addTo(map);
+				}
+			}
+		</script>
+
+	</head>
+
+	<body onload="initialize()">
+		<div id="mapid"></div>
+	</body>
+</html>
