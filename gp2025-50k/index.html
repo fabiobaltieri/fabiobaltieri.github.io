@@ -45,9 +45,30 @@
 						};
 					},
 				});
+				var customLayerHighlight = L.geoJson(null, {
+					filter: function(f) {
+						console.log(f);
+						if (f.geometry.type == "Point")
+							return false;
+						return true;
+					},
+					style: function(f) {
+						return {
+							color: 'blue',
+							opacity: '100%',
+						};
+					},
+				});
+
+				const urlParams = new URLSearchParams(window.location.search);
+				const hl = urlParams.get('hl');
 
 				for (i = 200; i <= 245; i++) {
-					var kml = omnivore.kml(i+'.kml', null, customLayer);
+					if (i == hl) {
+						var kml = omnivore.kml(i+'.kml', null, customLayerHighlight);
+					} else {
+						var kml = omnivore.kml(i+'.kml', null, customLayer);
+					}
 					kml.bindPopup(function(layer) {
 						console.log(layer.feature.properties.name);
 						return layer.feature.properties.name;
