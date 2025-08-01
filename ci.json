@@ -1,0 +1,1 @@
+{"runs": [{"name": "Scorecards supply-chain security", "status": "pass"}, {"name": "CodeQL", "status": "pass"}, {"name": "Hello World (Multiplatform)", "status": "pass"}, {"name": "Build with Clang/LLVM", "status": "pass"}, {"name": "Run tests with twister", "status": "fail"}]}
